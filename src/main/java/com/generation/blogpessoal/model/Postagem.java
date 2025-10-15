@@ -4,11 +4,14 @@ import java.time.LocalDateTime;
 
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -16,12 +19,12 @@ import jakarta.validation.constraints.Size;
 //Primeiro cria as classes: id, titulo, texto, etc
 //Definir as regras de validação de dados, acrescenta os @:
 
-@Entity // é uma classe que 
-@Table(name = "tb_postagens") // CREATE TABLE tb_postagens()
+@Entity // Diz ao JPA que essa classe é uma entidade (uma tabela do BD)
+@Table(name = "tb_postagens") // Define o nome exato da tabela, seria o: CREATE TABLE tb_postagens()
 public class Postagem {
 	
-	@Id // PRIMARY KEY (id) 
-	@GeneratedValue(strategy = GenerationType.IDENTITY) //AUTO_INCREMENT
+	@Id // Indica que o atributo ID é a chave primária (PRIMARY KEY) da tabela.
+	@GeneratedValue(strategy = GenerationType.IDENTITY) //AUTO_INCREMENT -- Atenção! O parametro pode manter o mesmo para qq recurso, mas existem outros
 	private Long id;
 	
 	@Column(length=100) //define o tamanho que terá lá no BD
@@ -37,11 +40,16 @@ public class Postagem {
 	@UpdateTimestamp // atualiza data e hora quando cria e atualiza
 	private LocalDateTime data; // guarda data e hora
 	
+	//Incluindo relacionamento com a Classe-Tabela Tema
+	@ManyToOne
+	@JsonIgnoreProperties("postagem") //quebra o loop infinito -- mesmo nome no arquivo Tema da model
+	private Tema tema;
+	
 	
 	//no Springboot não precisa adicionar o método construtor
 	
-	
 	// Adiciona os métodos Get e Set:
+	
 	public Long getId() {
 		return id;
 	}
@@ -65,6 +73,13 @@ public class Postagem {
 	}
 	public void setData(LocalDateTime data) {
 		this.data = data;
+	}
+	
+	public Tema getTema() {
+		return tema;
+	}
+	public void setTema(Tema tema) {
+		this.tema = tema;
 	}
 	
 	
