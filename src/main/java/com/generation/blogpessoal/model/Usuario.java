@@ -29,7 +29,7 @@ public class Usuario {
 	private String nome;
 
 	@Schema(example = "email@email.com.br")
-	@NotBlank(message = "O Atributo Usuário é Obrigatório!")
+	@NotBlank(message = "O Atributo Usuário é Obrigatório! ")
 	@Email(message = "O Atributo Usuário deve ser um email válido!")
 	private String usuario;
 
